@@ -1,0 +1,27 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{{jquery | safe}}
+{{css | safe}}
+{{jsmart | safe}}
+{{menu | safe}}
+<br>
+<h1 align=center>{{title}}</h1>
+<form method=POST action=ret-comp>
+    <input type=hidden name=money value={{money_form | safe}}>
+    <input type=hidden name=user_id value={{user_id_form | safe}}>
+    <input type=hidden name=day value={{day_form | safe}}>
+    {{res | safe}}
+<table align=center>
+    <tr><td>患者名</td><td>{{user_name | safe}}</td></tr>
+    <tr><td>医療費</td><td>{{money | safe}}</td></tr>
+    <tr><td>退院日</td><td>{{day | safe}}</td></tr>
+    <tr><td colspan="2" align=reght><input type=submit value=送信></td></tr>
+</table>
+</form>
+<form method=POST action=ret>
+    <input type=hidden name=user_id value={{user_id | safe}}>
+    <table align=center>
+        <tr>
+            <td align=right><input type=submit value=やり直す></td>
+        </tr>
+    </table>
+</form>

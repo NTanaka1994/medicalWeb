@@ -1,0 +1,29 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{{jquery | safe}}
+{{css | safe}}
+{{jsmart | safe}}
+{{menu | safe}}
+<br>
+  <h1 align=center>{{title | safe}}</h1>
+  {{res | safe}}
+
+<script>
+  function ajaxUpdate(url,element){
+    var ajax=new XMLHttpRequest;
+    ajax.open("GET",url,true);
+    ajax.onload=function(){
+      element.innerHTML=ajax.responseText;
+    };
+    ajax.send(null);
+    setTimeout(function(){
+        ajaxUpdate(url,element);
+      },10000)
+  }
+  window.addEventListener("load",function(){
+    var url="http://localhost:5000/ajax";
+    var div=document.getElementById("ajaxreload");
+    setTimeout(function(){
+      ajaxUpdate(url,div);
+    },5000)
+  });
+</script>

@@ -1,0 +1,23 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{{jquery | safe}}
+{{css | safe}}
+{{jsmart | safe}}
+{{menu | safe}}
+<br>
+<h1 align=center>{{title}}様のナースコール</h1>
+<form action=call-check method=POST>
+<input type=hidden name=user_id value={{user_id | safe}}>
+<table align=center style="border-collapse: collapse">
+    <tr><td>ナースコールの内容</td></tr>
+    <tr><td>
+        <textarea name=call_cont required></textarea>
+    </td></tr>
+    <tr><td>処置内容</td></tr>
+    <tr><td>
+        <textarea name=act_cont required></textarea>
+        <input type=submit value=送信>
+    </td></tr>
+</table>
+<input type=hidden name=call value="{{token | safe}}">
+</form>
+{{res | safe}}

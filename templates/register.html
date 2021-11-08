@@ -1,0 +1,23 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+{{css | safe}}
+{{jsmart | safe}}
+{{menu | safe}}
+<br>
+<h1 align=center>{{title}}</h1>
+<form method=POST action=register>
+<table align=center>
+    <tr><td>名前</td><td><input required type=text name=user_name placeholder=名前を入れてください></td></tr>
+    <tr><td>種別</td><td><input type=radio name=perm value=1 checked>医者<br><input type=radio name=perm value=2>看護師<br><input type=radio name=perm value=3>患者<br></td></tr>
+    <tr><td>部屋(病室)</td><td><input required type=text name=room placeholder=医者と看護師の場合所属場所></td></tr>
+    <tr><td>保険証番号</td><td><input type=text name=num placeholder=半角で記号と番号と技番をハイフンなしで></td></tr>
+    <tr><td>診察券</td><td><input required type=text name=tick placeholder=半角で診察券の番号を入れてください></td></tr>
+    <tr><td>住所</td><td><input required type=text name=loca placeholder=住所を都道府県から入れてください></td></tr>
+    <tr><td>携帯電話番号</td><td><input required type=tel name=tel placeholder=半角で入力></td></tr>
+    <tr><td>メールアドレス</td><td><input required type=email name=mail placeholder="メールアドレスを入れてください"></td></tr>
+    <tr><td>生年月日</td><td><input required type=date name=birth></td></tr>
+    <tr><td>パスワード</td><td><input type="password" name=pass required></td></tr>
+    <tr><td></td><td align=right><input type=submit value="登録"></td></tr>
+</table>
+<input type=hidden name=register value="{{token | safe}}">
+</form>

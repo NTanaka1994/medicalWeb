@@ -1,0 +1,17 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{{jquery | safe}}
+{{css | safe}}
+{{jsmart | safe}}
+{{menu | safe}}
+<br>
+<h1 align=center>{{title}}様の退院情報</h1>
+<form action=ret-check method=POST>
+<input type=hidden name=user_id value={{user_id | safe}}>
+<table align=center border=1 style="border-collapse: collapse">
+    <tr><td>医療費</td><td><input required type=number name=money></td></tr>
+    <tr><td>退院日</td><td><input required type=date name=day></td></tr>
+    <tr><td colspan="2"><input type=submit value=送信></td></tr>
+</table>
+<input type=hidden name=ret value="{{token | safe}}">
+</form>
+{{res | safe}}

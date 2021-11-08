@@ -1,0 +1,19 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{{jquery | safe}}
+{{css | safe}}
+{{jsmart | safe}}
+{{menu | safe}}
+<br>
+<h1 align=center>{{title}}様の治療内容追加</h1>
+<form action=treat-add-check method=POST>
+<table align=center border=1 style="border-collapse: collapse">
+    <tr><td>タイトル</td><td><input name=title type=text required></td></tr>
+    <tr><td colspan=2>
+    <textarea name=cont required></textarea>
+    <input type=hidden name=id value={{user_id | safe}}>
+    <input type=submit value=送信>
+    </td></tr>
+</table>
+<input type=hidden name=treat-add value="{{token | safe}}">
+</form>
+{{res | safe}}

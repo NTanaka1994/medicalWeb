@@ -1,0 +1,17 @@
+<h3 class="logo">患者用メニュー</h3>
+    <div class="drawer">        
+      <input type="checkbox" name="navToggle" id="navToggle" class="nav-toggle">
+      <label for="navToggle" class="btn-burger">
+        <span class="icon"></span>            
+      </label>        
+       
+      <nav class="nav">                    
+       <ul class="nav-list">            
+        <li><a href="home">ホーム</a></li>
+      	<li><a href="news">医者からの連絡</a></li>
+      	<li><a href="chco">持病登録</a></li>
+      	<li><a href="medi">内服薬登録</a></li>
+      	<li><a href="vital">状態入力</a></li>     
+       </ul>            
+      </nav>        
+    </div>

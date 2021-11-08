@@ -1,0 +1,260 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{{jquery | safe}}
+{{css | safe}}
+{{jsmart | safe}}
+{{menu | safe}}
+<br>
+<h1 align=center>{{title}}</h1>
+<table align=center>
+    <tr>
+        <td>
+            <div style="width: 161px;">
+                <canvas id="myChart1" width="200" height="200"></canvas>
+            </div>
+        </td>
+        <td>
+            <div style="width: 161px;">
+                <canvas id="myChart2" width="200" height="200"></canvas>
+            </div>
+        </td>
+        <td>
+            <div style="width: 161px;">
+                <canvas id="myChart3" width="200" height="200"></canvas>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div style="width: 161px;">
+                <canvas id="myChart4" width="200" height="200"></canvas>
+            </div>
+        </td>
+        <td>
+            <div style="width: 161px;">
+                <canvas id="myChart5" width="200" height="200"></canvas>
+            </div>
+        </td>
+        <td>
+            <div style="width: 161px;">
+                <canvas id="myChart6" width="200" height="200"></canvas>
+            </div>
+        </td>
+    </tr>
+</table>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+<script>
+    var url = "http://localhost:5000/vital-json?id={{user_id}}";
+    var res = "";
+    var req = new XMLHttpRequest();
+    var js;
+    req.onreadystatechange = function(){
+        if(req.readyState==4&&req.status==200){
+            res=req.responseText;
+        }
+    };
+    
+    //console.log(num);
+    req.open("GET",url,false);
+    req.send(null);
+    //js=JSON.parse(res).temp;
+    //let num=Array(js.length).fill(0).map((v,i)=>i+1);
+    let num=JSON.parse(res).time;
+    var ctx = document.getElementById("myChart1");
+    var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: num,
+        datasets: [{
+            label: '温度(C)',
+            data: JSON.parse(res).temp,
+            fill:false,
+            borderColor: [
+                'rgba(255,0,0,255)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        animation: false,
+        scales: {
+            xAxes:[{
+                display:false
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+
+});
+    var ctx = document.getElementById("myChart2");
+    var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: num,
+        datasets: [{
+            label: '血圧上(mmHg)',
+            data: JSON.parse(res).prema,
+            fill:false,
+            borderColor: [
+                'rgba(0,255,0,255)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        animation: false,
+        scales: {
+            xAxes:[{
+                display:false
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+    var ctx = document.getElementById("myChart3");
+    var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: num,
+        datasets: [{
+            label: '血圧下(mmHg)',
+            data: JSON.parse(res).premi,
+            fill:false,
+            borderColor: [
+                'rgba(0,0,255,255)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        animation: false,
+        scales: {
+            xAxes:[{
+                display:false
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+    var ctx = document.getElementById("myChart4");
+    var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: num,
+        datasets: [{
+            label: '血中酸素飽和度(%)',
+            data: JSON.parse(res).spo2,
+            fill:false,
+            borderColor: [
+                'rgba(255,255,0,255)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        animation: false,
+        scales: {
+            xAxes:[{
+                display:false
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+    var ctx = document.getElementById("myChart5");
+    var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: num,
+        datasets: [{
+            label: '心拍数(回)',
+            data: JSON.parse(res).eat,
+            fill:false,
+            borderColor: [
+                'rgba(255,0,255,255)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        animation: false,
+        scales: {
+            xAxes:[{
+                display:false
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+    var ctx = document.getElementById("myChart6");
+    var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: num,
+        datasets: [{
+            label: '食事量(%)',
+            data: JSON.parse(res).beat,
+            fill:false,
+            borderColor: [
+                'rgba(0,255,255,255)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        animation: false,
+        scales: {
+            xAxes:[{
+                display:false
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+</script>
+
+{{res | safe}}
+
+<script>
+    function ajaxUpdate(url,element){
+        var ajax=new XMLHttpRequest;
+        ajax.open("GET",url,true);
+        ajax.onload=function(){
+        element.innerHTML=ajax.responseText;
+    };
+    ajax.send(null);
+    setTimeout(function(){
+        ajaxUpdate(url,element);
+    },10000)
+    }
+    window.addEventListener("load",function(){
+      var url="http://localhost:5000/ajax";
+      var div=document.getElementById("ajaxreload");
+      setTimeout(function(){
+        ajaxUpdate(url,div);
+      },5000)
+    });
+  </script>

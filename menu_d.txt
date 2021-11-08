@@ -1,0 +1,20 @@
+<h3 class="logo">医師用メニュー</h3>
+    <div class="drawer">        
+      <input type="checkbox" name="navToggle" id="navToggle" class="nav-toggle">
+      <label for="navToggle" class="btn-burger">
+        <span class="icon"></span>            
+      </label>        
+       
+      <nav class="nav">                    
+       <ul class="nav-list">            
+        <li><a href="home">ホーム</a></li>
+      <li><a href="register">利用者登録</a></li>
+      <li><a href="msg-doc">患者へ連絡</a></li>
+      <li><a href="record-add">カルテ追加</a></li>
+      <li><a href="treat-add">治療内容追加</a></li>
+      <li><a href="result-add">検査結果</a></li>
+      <li><a href="patient">患者データ</a></li>
+      <li><a href="ret">退院記録</a></li>
+       </ul>            
+      </nav>        
+    </div>

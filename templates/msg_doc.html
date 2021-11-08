@@ -1,0 +1,16 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{{jquery | safe}}
+{{css | safe}}
+{{jsmart | safe}}
+{{menu | safe}}
+<br>
+<h1 align=center>{{title | safe}}</h1>
+<form method=POST action="msg-doc-check">
+<table border="1" align="center" style="border-collapse: collapse">
+    <tr><td>タイトル</td><td><input type=text name=title required></td></tr>
+    <tr><td colspan="2">本文<br><textarea name=cont required></textarea><br><input type=submit></td></tr>
+</table>
+<input type=hidden name=user_id value={{hide}}>
+<input type=hidden name=msg-doc value="{{token | safe}}">
+</form>
+{{res | safe}}

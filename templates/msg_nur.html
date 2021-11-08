@@ -1,0 +1,16 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{{jquery | safe}}
+{{css | safe}}
+{{jsmart | safe}}
+{{menu | safe}}
+<br>
+<h1 align=center>{{title | safe}}</h1>
+<form method=POST action="msg-nur">
+<table border="1" align="center" style="border-collapse: collapse">
+    <tr><td>タイトル</td><td><input type=text name=title required></td></tr>
+    <tr><td colspan="2">本文<br><textarea name=cont required></textarea><br><input type=submit></td></tr>
+</table>
+<h3 align=center><a href=home>メニューに戻る</a></h3>
+<input type=hidden name=msg-nur value="{{token | safe}}">
+</form>
+{{res | safe}}
