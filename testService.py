@@ -1,5 +1,4 @@
 from flask import Flask,request,jsonify,render_template,session,redirect
-#from waitress import serve
 from werkzeug.security import generate_password_hash as gph
 from werkzeug.security import check_password_hash as cph
 from datetime import timedelta
