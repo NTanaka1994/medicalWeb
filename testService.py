@@ -1,4 +1,5 @@
 from flask import Flask,request,jsonify,render_template,session,redirect
+#from flask_cors import CORS
 from werkzeug.security import generate_password_hash as gph
 from werkzeug.security import check_password_hash as cph
 from datetime import timedelta
@@ -54,11 +55,12 @@ f.close()
 
 #サービススタート
 app = Flask(__name__)
+#CORS(app,supports_credentials=True)
 
 #セッション
 #シークレットキー
 app.secret_key=secrets.token_urlsafe(16)
-#20分間セッションを維持
+#60分間セッションを維持
 app.permanent_session_lifetime=timedelta(minutes=60)
 
 #共通
@@ -114,7 +116,7 @@ def ajax():
             res="<div id=\"ajaxreload\"><table border=1 align=center style=\"border-collapse: collapse\">\n"
             res=res+"\t<tr><td align=center>患者名</td><td align=center>カルテ</td><td align=center>治療方針</td><td align=center>連絡</td><td align=center>検査結果</td><td align=center>退院</td></tr>\n"
             for col in cur:
-                res=res+"<tr><td align=center>"+str(col[0])+"</td>"
+                res=res+"<tr><td align=center>"+html.escape(str(col[0]))+"</td>"
                 res=res+"<td align=center><form action=record-add method=POST><input type=hidden name=id value="+str(col[1])+"><input type=submit value=追加></form></td>"
                 res=res+"<td align=center><form action=treat-add method=POST><input type=hidden name=user_id value="+str(col[1])+"><input type=submit value=追加></form></td>"
                 res=res+"<td align=center><form action=msg-doc method=POST><input type=hidden value="+str(col[1])+" name=user_id><input type=submit value=追加></form></td>"
@@ -129,7 +131,7 @@ def ajax():
                 cur2.execute("SELECT user_name FROM users WHERE user_id=?",(col[0],))
                 for col2 in cur2:
                     res=res+"\t<tr><td>記入者</td><td>タイトル</td><td rowspan=2>記入時刻</td><td rowspan=2>"+col[2][0:19]+"</td></tr>"
-                    res=res+"\t<tr><td>"+col2[0]+"</td><td>"+col[1]+"</td></tr>"
+                    res=res+"\t<tr><td>"+html.escape(col2[0])+"</td><td>"+col[1]+"</td></tr>"
                     res=res+"\t<tr><td colspan=4><pre>"+col[3]+"<pre></td></tr>"
             res=res+"</table></div>"
             conn.close()
@@ -143,7 +145,7 @@ def ajax():
             res=res+"\t<tr><td align=center>患者名</td><td align=center>ナースコール</td><td align=center>カルテ閲覧</td><td align=center>治療内容閲覧</td><td align=center>検査結果一覧</td><td align=center>患者データ</td></tr>"
             for col in cur:
                 res=res+"\t<tr>"
-                res=res+"<td align=center>"+col[0]+"</td>"
+                res=res+"<td align=center>"+html.escape(col[0])+"</td>"
                 res=res+"<td align=center><form method=POST action=call><input type=hidden name=user_id value="+str(col[1])+"><input type=submit value=記録></form></td>"
                 res=res+"<td align=center><form method=POST action=record-info><input type=hidden name=user_id value="+str(col[1])+"><input type=submit value=閲覧></form></td>"
                 res=res+"<td align=center><form method=POST action=treat-info><input type=hidden name=user_id value="+str(col[1])+"><input type=submit value=閲覧></form></td>"
@@ -164,7 +166,7 @@ def ajax():
                 cur2.execute("SELECT user_name FROM users WHERE user_id=? ORDER BY time DESC",(int(col[2]),))
                 for col2 in cur2:
                     res=res+"\t<tr><td>記入者</td><td>タイトル</td><td rowspan=2>記入時刻</td><td rowspan=2>"+col[3][0:19]+"</td></tr>"
-                    res=res+"\t<tr><td>"+col2[0]+"</td><td>"+col[1]+"</td></tr>"
+                    res=res+"\t<tr><td>"+html.escape(col2[0])+"</td><td>"+col[1]+"</td></tr>"
                     res=res+"\t<tr><td colspan=4><pre>"+col[4]+"<pre></td></tr>"
             res=res+"</table></div>"
             conn.close()
@@ -181,7 +183,7 @@ def home():
             res="<div id=\"ajaxreload\"><table border=1 align=center style=\"border-collapse: collapse\">\n"
             res=res+"\t<tr><td align=center>患者名</td><td align=center>カルテ</td><td align=center>治療方針</td><td align=center>連絡</td><td align=center>検査結果</td><td align=center>退院</td></tr>\n"
             for col in cur:
-                res=res+"<tr><td align=center>"+str(col[0])+"</td>"
+                res=res+"<tr><td align=center>"+html.escape(str(col[0]))+"</td>"
                 res=res+"<td align=center><form action=record-add method=POST><input type=hidden name=id value="+str(col[1])+"><input type=submit value=追加></form></td>"
                 res=res+"<td align=center><form action=treat-add method=POST><input type=hidden name=user_id value="+str(col[1])+"><input type=submit value=追加></form></td>"
                 res=res+"<td align=center><form action=msg-doc method=POST><input type=hidden value="+str(col[1])+" name=user_id><input type=submit value=追加></form></td>"
@@ -196,7 +198,7 @@ def home():
                 cur2.execute("SELECT user_name FROM users WHERE user_id=?",(col[0],))
                 for col2 in cur2:
                     res=res+"\t<tr><td>記入者</td><td>タイトル</td><td rowspan=2>記入時刻</td><td rowspan=2>"+col[2][0:19]+"</td></tr>"
-                    res=res+"\t<tr><td>"+col2[0]+"</td><td>"+col[1]+"</td></tr>"
+                    res=res+"\t<tr><td>"+html.escape(col2[0])+"</td><td>"+col[1]+"</td></tr>"
                     res=res+"\t<tr><td colspan=4><pre>"+col[3]+"<pre></td></tr>"
             res=res+"</table></div>"
             conn.close()
@@ -210,7 +212,7 @@ def home():
             res=res+"\t<tr><td align=center>患者名</td><td align=center>ナースコール</td><td align=center>カルテ閲覧</td><td align=center>治療内容閲覧</td><td align=center>検査結果一覧</td><td align=center>患者データ</td></tr>"
             for col in cur:
                 res=res+"\t<tr>"
-                res=res+"<td align=center>"+col[0]+"</td>"
+                res=res+"<td align=center>"+html.escape(col[0])+"</td>"
                 res=res+"<td align=center><form method=POST action=call><input type=hidden name=user_id value="+str(col[1])+"><input type=submit value=記録></form></td>"
                 res=res+"<td align=center><form method=POST action=record-info><input type=hidden name=user_id value="+str(col[1])+"><input type=submit value=閲覧></form></td>"
                 res=res+"<td align=center><form method=POST action=treat-info><input type=hidden name=user_id value="+str(col[1])+"><input type=submit value=閲覧></form></td>"
@@ -231,7 +233,7 @@ def home():
                 cur2.execute("SELECT user_name FROM users WHERE user_id=? ORDER BY time DESC",(int(col[2]),))
                 for col2 in cur2:
                     res=res+"\t<tr><td>記入者</td><td>タイトル</td><td rowspan=2>記入時刻</td><td rowspan=2>"+col[3][0:19]+"</td></tr>"
-                    res=res+"\t<tr><td>"+col2[0]+"</td><td>"+col[1]+"</td></tr>"
+                    res=res+"\t<tr><td>"+html.escape(col2[0])+"</td><td>"+col[1]+"</td></tr>"
                     res=res+"\t<tr><td colspan=4><pre>"+col[4]+"<pre></td></tr>"
             res=res+"</table></div>"
             conn.close()
@@ -257,16 +259,16 @@ def chco():
                 return render_template("news.html", res=res,title="持病登録画面",css=css,jquery=jquery,jsmart=jsmart,menu=menu_p)
             elif request.method=="POST":
                 if session["chco_in"]==request.form["chco_in"]:
-                    disa=html.escape(request.form["disa"])
-                    cont=html.escape(request.form["cont"])
+                    disa=request.form["disa"]
+                    cont=request.form["cont"]
                     token=secrets.token_hex()
                     session["chco"]=token
                     res="<form method=POST action=chco-comp><table border=1 align=center style=\"border-collapse: collapse\">\n"
-                    res=res+"\t<tr><td>持病名</td><td>"+disa+"</td></tr>"
-                    res=res+"\t<tr><td colspan=2><pre>"+cont+"</pre></td></tr>\n"
+                    res=res+"\t<tr><td>持病名</td><td>"+html.escape(disa)+"</td></tr>"
+                    res=res+"\t<tr><td colspan=2><pre>"+html.escape(cont)+"</pre></td></tr>\n"
                     res=res+"\t<tr><td colspan=2 align=right><input type=submit value=登録><a href=chco>登録画面に戻る</a></td></tr>\n"
-                    res=res+"<input type=hidden name=disa value=\""+disa+"\">"
-                    res=res+"<input type=hidden name=cont value=\""+cont+"\">"
+                    res=res+"<input type=hidden name=disa value=\""+html.escape(disa)+"\">"
+                    res=res+"<input type=hidden name=cont value=\""+html.escape(cont)+"\">"
                     res=res+"<input type=hidden name=chco value=\""+token+"\">"
                     res=res+"</table></form>"
                     return render_template("news.html", res=res,title="以下の内容で登録しますか？",css=css,jquery=jquery,jsmart=jsmart,menu=menu_p)
@@ -288,8 +290,8 @@ def chco_comp():
                     dbname="test.db"
                     conn=sql.connect(dbname,check_same_thread=False)
                     cur=conn.cursor()
-                    disa=html.escape(request.form["disa"])
-                    cont=html.escape(request.form["cont"])
+                    disa=request.form["disa"]
+                    cont=request.form["cont"]
                     t=(session["user_id"],cont,disa)
                     cur.execute("INSERT INTO chro (pati_id,cont,title) VALUES (?,?,?)",t)
                     conn.commit()
@@ -318,13 +320,13 @@ def medi():
                 return render_template("medi.html", res=res,title="内服薬を一つ入力してください",css=css,jquery=jquery,jsmart=jsmart,menu=menu_p)
             elif request.method=="POST":
                 if session["medi_in"]==request.form["medi_in"]:
-                    medi=html.escape(request.form["medi"])
+                    medi=request.form["medi"]
                     token=secrets.token_hex()
                     session["medi"]=token
                     res="<form method=POST action=medi-comp>\n<table border=1 align=center style=\"border-collapse: collapse\">\n"
-                    res=res+"\t<tr><td>内服薬</td><td>"+medi+"</td></tr>"
+                    res=res+"\t<tr><td>内服薬</td><td>"+html.escape(medi)+"</td></tr>"
                     res=res+"\t<tr><td colspan=2 align=right><input type=submit value=登録><a href=medi>登録画面に戻る</a></td></tr>\n"
-                    res=res+"<input type=hidden name=medi value=\""+medi+"\">"
+                    res=res+"<input type=hidden name=medi value=\""+html.escape(medi)+"\">"
                     res=res+"<input type=hidden name=medi_token value=\""+token+"\">"
                     res=res+"</table>"
                     return render_template("medi.html", res=res,title="以下の内容で登録しますか？",css=css,jquery=jquery,jsmart=jsmart,menu=menu_p)
@@ -518,7 +520,7 @@ def patient():
                 cur.execute("SELECT user_id,user_name FROM users WHERE perm=3")
                 res="<table align=center border=1 style=\"border-collapse: collapse\">\n"
                 for col in cur:
-                    res=res+"\t<tr><td>"+col[1]+"</td><td><form method=POST action=patient><input name=id type=hidden value="+str(col[0])+"><input type=submit value=閲覧></form></td></tr>\n"
+                    res=res+"\t<tr><td>"+html.escape(col[1])+"</td><td><form method=POST action=patient><input name=id type=hidden value="+str(col[0])+"><input type=submit value=閲覧></form></td></tr>\n"
                 res=res+"</table>"
                 conn.close()
                 if session["perm"]==1:
@@ -573,7 +575,7 @@ def result_add():
                 cur.execute("SELECT user_id,user_name FROM users WHERE perm=3")
                 res="<table align=center border=1 style=\"border-collapse: collapse\">\n"
                 for col in cur:
-                    res=res+"\t<tr><td>"+col[1]+"</td><td><form method=POST action=result-add><input type=hidden name=user_id value="+str(col[0])+"><input type=submit value=編集></form></td></tr>\n"
+                    res=res+"\t<tr><td>"+html.escape(col[1])+"</td><td><form method=POST action=result-add><input type=hidden name=user_id value="+str(col[0])+"><input type=submit value=編集></form></td></tr>\n"
                 res=res+"</table>"
                 conn.close()
                 if session["perm"]==1:
@@ -636,7 +638,7 @@ def result_add_check():
                     res=res+"\t<input type=hidden name=cont value=\""+cont+"\">"
                     res=res+"\t<input type=hidden name=result-add-check value=\""+token+"\">"
                     for col in cur:
-                        res=res+"\t<tr><td>患者名</td><td>"+col[0]+"</td></tr>\n"
+                        res=res+"\t<tr><td>患者名</td><td>"+html.escape(col[0])+"</td></tr>\n"
                     res=res+"\t<tr><td colspan=2>"+cont+"</td></tr>\n"
                     res=res+"\t<tr><td colspan=2><input type=submit value=確定></td></tr>\n"
                     res=res+"</table>\n</form>"
@@ -798,7 +800,7 @@ def treat_add():
                 cur.execute("SELECT user_id,user_name FROM users WHERE perm=3")
                 res="<table align=center border=1 style=\"border-collapse: collapse\">\n"
                 for col in cur:
-                    res=res+"\t<tr><td>"+col[1]+"</td><td><form method=POST action=treat-add><input type=hidden name=user_id value="+str(col[0])+"><input type=submit value=編集></form></td></tr>\n"
+                    res=res+"\t<tr><td>"+html.escape(col[1])+"</td><td><form method=POST action=treat-add><input type=hidden name=user_id value="+str(col[0])+"><input type=submit value=編集></form></td></tr>\n"
                 res=res+"</table>"
                 conn.close()
                 return render_template("treat_add_meibo.html", title="患者一覧",res=res,css=css,jquery=jquery,jsmart=jsmart,menu=menu_d)
@@ -814,7 +816,6 @@ def treat_add():
                 for col in cur:
                     tmp.append(col[0])
                 res="<table align=center><tr><td>"
-                #res=res+"<input type=hidden name=treat-add value=\""+token+"\">"
                 res=res+"<h3 align=center><a href=home>ホームに戻る</a></h3>\n"
                 res=res+"</td><td><h3 align=center><a href=treat-add>患者一覧</a></h3>"
                 res=res+"</td></tr></table>"
@@ -859,7 +860,7 @@ def treat_add_check():
                     res=res+"\t<input type=hidden name=title value=\""+title+"\">\n"
                     res=res+"\t<input type=hidden name=treat-add-check value=\""+token+"\">\n"
                     for col in cur:
-                        res=res+"\t<tr><td>患者名</td><td>"+col[0]+"</td></tr>\n"
+                        res=res+"\t<tr><td>患者名</td><td>"+html.escape(col[0])+"</td></tr>\n"
                     res=res+"\t<tr><td>タイトル</td><td>"+title+"</td></tr>\n"
                     res=res+"\t<tr><td colspan=2>"+cont+"</td></tr>\n"
                     res=res+"\t<tr><td colspan=2><input type=submit value=確定></td></tr>\n"
@@ -913,7 +914,7 @@ def record_add():
                 cur.execute("SELECT user_id,user_name FROM users WHERE perm=3")
                 res="<table align=center border=1 style=\"border-collapse: collapse\">\n"
                 for col in cur:
-                    res=res+"\t<tr><td>"+col[1]+"</td><td><form method=POST action=record-add><input type=hidden name=id value="+str(col[0])+"><input type=submit value=編集></form></td></tr>\n"
+                    res=res+"\t<tr><td>"+html.escape(col[1])+"</td><td><form method=POST action=record-add><input type=hidden name=id value="+str(col[0])+"><input type=submit value=編集></form></td></tr>\n"
                 res=res+"</table>"
                 conn.close()
                 return render_template("record_add_meibo.html", title="患者一覧",res=res,css=css,jquery=jquery,jsmart=jsmart,menu=menu_d)
@@ -970,7 +971,7 @@ def record_add_check():
                     res=res+"\t<input type=hidden name=cont value=\""+cont+"\">"
                     res=res+"\t<input type=hidden name=record-add-check value=\""+token+"\">"
                     for col in cur:
-                        res=res+"\t<tr><td>患者名</td><td>"+col[0]+"</td></tr>"
+                        res=res+"\t<tr><td>患者名</td><td>"+html.escape(col[0])+"</td></tr>"
                     res=res+"\t<tr><td colspan=2>"+cont+"</td></tr>"
                     res=res+"\t<tr><td colspan=2><input type=submit value=確定></td></tr>"
                     res=res+"</table>\n</form>"
@@ -1029,7 +1030,7 @@ def register():
                     for col in cur:
                         tmp.append(col)
                     if len(tmp)==0:
-                        t=(html.escape(request.form["user_name"]),gph(request.form["pass"]),int(request.form.get("perm")),html.escape(request.form["room"]),html.escape(request.form["num"]),html.escape(request.form["tick"]),str(datetime.datetime.today()),html.escape(request.form["loca"]),html.escape(request.form["tel"]),html.escape(request.form["mail"]),html.escape(request.form["birth"]))
+                        t=(request.form["user_name"],gph(request.form["pass"]),int(request.form.get("perm")),request.form["room"],request.form["num"],request.form["tick"],str(datetime.datetime.today()),request.form["loca"],request.form["tel"],request.form["mail"],request.form["birth"])
                         cur.execute("INSERT INTO users (user_name,pass,perm,room,num,tick,time,loca,tel,mail,birth) VALUES(?,?,?,?,?,?,?,?,?,?,?)",t)
                         conn.commit()
                         cate={}
@@ -1070,7 +1071,7 @@ def msg_doc():
                 cur.execute("SELECT user_name,user_id FROM users WHERE perm=3")
                 res="<table align=center border=1 style=\"border-collapse: collapse\">"
                 for col in cur:
-                    res=res+"\t<tr><td>"+col[0]+"</td><td><form action=msg-doc method=POST><input type=hidden value="+str(col[1])+" name=user_id><input type=submit value=作成></form></td></tr>"
+                    res=res+"\t<tr><td>"+html.escape(col[0])+"</td><td><form action=msg-doc method=POST><input type=hidden value="+str(col[1])+" name=user_id><input type=submit value=作成></form></td></tr>"
                 conn.close()
                 return render_template("msg_doc_menu.html",res=res,title="連絡先一覧",css=css,jquery=jquery,jsmart=jsmart,menu=menu_d)
             elif request.method=="POST":
@@ -1083,7 +1084,7 @@ def msg_doc():
                 tmp=[]
                 cur.execute("SELECT user_name FROM users WHERE user_id=?",(user_id,))
                 for col in cur:
-                    tmp.append(col[0])
+                    tmp.append(html.escape(col[0]))
                 res="<table align=center><tr><td>"
                 res=res+"<h3 align=center><a href=home>ホームに戻る</a></h3>\n"
                 res=res+"</td><td><h3 align=center><a href=msg-doc>患者一覧</a></h3>"
@@ -1126,7 +1127,7 @@ def msg_doc_check():
                     res=res+"\t<tr><td colspan=2>"+cont+"</td>\n"
                     cur.execute("SELECT user_name FROM users WHERE user_id=?",(user_id,))
                     for col in cur:
-                        res=res+"\t<tr><td>連絡先</td><td>"+col[0]+"</td></tr>"
+                        res=res+"\t<tr><td>連絡先</td><td>"+html.escape(col[0])+"</td></tr>"
                     res=res+"\t<tr><td colspan=2 align=right><input type=submit value=送信></td></tr>"
                     res=res+"</table>\n</form>\n"
                     res=res+"<form method=POST action=msg-doc><table align=center>\n"
@@ -1426,6 +1427,7 @@ def end():
     session.pop("user_id",None)
     res="<h3 align=center><a href=login>ログイン画面へ移動</a></h3>"
     return render_template("login.html", title="ログアウトしました",css=css,jquery=jquery,jsmart=jsmart,res=res)
+
 
 #クリックインジェクション
 @app.after_request
