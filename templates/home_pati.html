@@ -1,10 +1,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel=stylesheet type=text/css href=static/css/tab.css>
 {{jquery | safe}}
 {{css | safe}}
 {{jsmart | safe}}
 {{menu | safe}}
 <br>
 <h1 align=center>{{title}}</h1>
+<div class="tab-panel">
+	<!--タブ-->
+	<ul class="tab-group">
+		<li class="tab tab-vital is-active">バイタル情報</li>
+		<li class="tab tab-basic">医者からの連絡</li>
+	</ul>
+    <div class="panel-group">
+        <div class="panel tab-vital is-show">
+
 <table align=center>
     <tr>
         <td>
@@ -17,18 +27,20 @@
                 <canvas id="myChart2" width="200" height="200"></canvas>
             </div>
         </td>
+    </tr>
+    <tr>
         <td>
             <div style="width: 161px;">
                 <canvas id="myChart3" width="200" height="200"></canvas>
             </div>
         </td>
-    </tr>
-    <tr>
         <td>
             <div style="width: 161px;">
                 <canvas id="myChart4" width="200" height="200"></canvas>
             </div>
         </td>
+    </tr>
+    <tr>
         <td>
             <div style="width: 161px;">
                 <canvas id="myChart5" width="200" height="200"></canvas>
@@ -43,7 +55,7 @@
 </table>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 <script>
-    var url = "http://localhost:5000/vital-json?id={{user_id}}";
+    var url = "vital-json?id={{user_id}}"
     var res = "";
     var req = new XMLHttpRequest();
     var js;
@@ -235,7 +247,8 @@
     }
 });
 </script>
-
+</div>
+<div class="panel tab-basic">
 {{res | safe}}
 
 <script>
@@ -251,10 +264,28 @@
     },10000)
     }
     window.addEventListener("load",function(){
-      var url="http://localhost:5000/ajax";
+      var url="ajax";
       var div=document.getElementById("ajaxreload");
       setTimeout(function(){
         ajaxUpdate(url,div);
       },5000)
     });
   </script>
+  </div>
+  </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        const tabs = document.getElementsByClassName('tab');
+        for(let i = 0; i < tabs.length; i++) {
+            tabs[i].addEventListener('click', tabSwitch, false);
+        }
+        function tabSwitch(){
+            document.getElementsByClassName('is-active')[0].classList.remove('is-active');
+            this.classList.add('is-active');
+            document.getElementsByClassName('is-show')[0].classList.remove('is-show');
+            const arrayTabs = Array.prototype.slice.call(tabs);
+            const index = arrayTabs.indexOf(this);
+            document.getElementsByClassName('panel')[index].classList.add('is-show');
+        };
+    }, false);
+</script>
