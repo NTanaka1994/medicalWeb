@@ -1,5 +1,4 @@
 from flask import Flask,request,jsonify,render_template,session,redirect
-#from flask_cors import CORS
 from werkzeug.security import generate_password_hash as gph
 from werkzeug.security import check_password_hash as cph
 from datetime import timedelta
@@ -8,6 +7,7 @@ import secrets
 import html
 import os
 import datetime
+
 
 #ディレクトリトラバーサル対策
 def is_directory_traversal(file_name):
@@ -72,8 +72,8 @@ def non():
 def login():
     if request.method=="GET":
         res="<form method=post action=login>"
-        res=res+"<table align=center border=1 style=\"border-collapse: collapse\">\n<tr><td>ユーザ名</td><td><input type=text name=\"name\"></td>"
-        res=res+"\n<tr><td>パスワード</td><td><input type=password name=\"pass\"></td>"
+        res=res+"<table align=center border=1 style=\"border-collapse: collapse\">\n<tr><td>ユーザ名</td><td><input required type=email name=\"name\"></td>"
+        res=res+"\n<tr><td>パスワード</td><td><input required type=password name=\"pass\"></td>"
         res=res+"\n<tr><td></td><td><input type=submit value=ログイン></td>"
         res=res+"</table>"
         res=res+"</form>"
@@ -98,8 +98,8 @@ def login():
         else:
             conn.close()
             res="<form method=post action=login>"
-            res=res+"<table align=center border=1 style=\"border-collapse: collapse\">\n<tr><td>ユーザ名</td><td><input type=text name=\"name\"></td>"
-            res=res+"\n<tr><td>パスワード</td><td><input type=password name=\"pass\"></td>"
+            res=res+"<table align=center border=1 style=\"border-collapse: collapse\">\n<tr><td>ユーザ名</td><td><input required type=email name=\"name\"></td>"
+            res=res+"\n<tr><td>パスワード</td><td><input required type=password name=\"pass\"></td>"
             res=res+"\n<tr><td></td><td><input type=submit value=ログイン></td>"
             res=res+"</table>"
             res=res+"</form>"
@@ -604,7 +604,7 @@ def result_add():
                     cur2=conn.cursor()
                     cur2.execute("SELECT user_name FROM users WHERE user_id=?",(col[0],))
                     for col2 in cur2:
-                        res=res+"\t<tr><td>担当者</td><td>"+col2[0]+"</td><td>検査日時</td><td>"+col[1][0:19]+"</td></tr>\n"
+                        res=res+"\t<tr><td>担当者</td><td>"+html.escape(col2[0])+"</td><td>検査日時</td><td>"+col[1][0:19]+"</td></tr>\n"
                         res=res+"\t<tr><td colspan=4>検査結果<br><pre>"+html.escape(col[2])+"</pre></td></tr>\n"
                 res=res+"</table>"
                 conn.close()
@@ -697,7 +697,7 @@ def ret():
                 res="<table align=center border=1 style=\"border-collapse: collapse\">\n"
                 cur.execute("SELECT user_name,user_id FROM users WHERE perm=3")
                 for col in cur:
-                    res=res+"\t<tr><td>"+col[0]+"</td><td><form action=ret method=POST><input type=hidden name=user_id value="+str(col[1])+"><input type=submit value=記入></form></td></tr>"
+                    res=res+"\t<tr><td>"+html.escape(col[0])+"</td><td><form action=ret method=POST><input type=hidden name=user_id value="+str(col[1])+"><input type=submit value=記入></form></td></tr>"
                 res=res+"</table>"
                 conn.close()
                 return render_template("calc_menu.html", res=res,title="患者様一覧",css=css,jquery=jquery,jsmart=jsmart,menu=menu_d)
@@ -717,7 +717,7 @@ def ret():
                 res=res+"<td align=center><h3><a href=ret>患者一覧</a></h3></td></tr>\n"
                 res=res+"</table>\n"
                 cur.execute("SELECT doc_id,time,day,money FROM ret WHERE pati_id=? ORDER BY time DESC",(int(user_id),))
-                res=res+"<h2 align=center>"+tmp[0]+"様の退院情報</h2>\n"
+                res=res+"<h2 align=center>"+html.escape(tmp[0])+"様の退院情報</h2>\n"
                 res=res+"<table align=center border=1 style=\"border-collapse: collapse\">\n"
                 for col in cur:
                     cur2=conn.cursor()
@@ -755,7 +755,7 @@ def ret_check():
                     for col in cur:
                         tmp.append(col[0])
                     conn.close()
-                    return render_template("calc_check.html", res=res,user_id=user_id,user_name=tmp[0],money=str(money),day=str(day),money_form=str(money),user_id_form=str(user_id),day_form=str(day),title="以下の内容で登録しますか？",css=css,jquery=jquery,jsmart=jsmart,menu=menu_d)
+                    return render_template("calc_check.html", res=res,user_id=user_id,user_name=html.escape(tmp[0]),money=str(money),day=str(day),money_form=str(money),user_id_form=str(user_id),day_form=str(day),title="以下の内容で登録しますか？",css=css,jquery=jquery,jsmart=jsmart,menu=menu_d)
                 else:
                     return redirect("ret")
         else:
@@ -826,7 +826,7 @@ def treat_add():
                     cur2=conn.cursor()
                     cur2.execute("SELECT user_name FROM users WHERE user_id=?",(col[0],))
                     for col2 in cur2:
-                        res=res+"\t<tr><td>担当者</td><td>"+col2[0]+"</td><td>対応日時</td><td>"+col[1]+"</td></tr>\n"
+                        res=res+"\t<tr><td>担当者</td><td>"+html.escape(col2[0])+"</td><td>対応日時</td><td>"+col[1]+"</td></tr>\n"
                         res=res+"\t<tr><td>内容</td><td colspan=3>"+html.escape(col[2])+"</td></tr>\n"
                         res=res+"\t<tr><td colspan=4>方針<br><pre>"+html.escape(col[3])+"</pre></td></tr>\n"
                 res=res+"</table>"
@@ -940,7 +940,7 @@ def record_add():
                     cur2=conn.cursor()
                     cur2.execute("SELECT user_name FROM users WHERE user_id=?",(col[0],))
                     for col2 in cur2:
-                        res=res+"\t<tr><td>記録者</td><td>"+str(col2[0])+"</td><td>記録日時</td><td>"+str(col[1])[0:19]+"</td></tr>\n"
+                        res=res+"\t<tr><td>記録者</td><td>"+html.escape(str(col2[0]))+"</td><td>記録日時</td><td>"+str(col[1])[0:19]+"</td></tr>\n"
                         res=res+"\t<tr><td colspan=4>"+html.escape(col[2])+"</td></tr>\n"
                 res=res+"</table>"
                 conn.close()
@@ -1285,7 +1285,7 @@ def call():
                     tmp.append(col[0])
                 res="<table align=center><tr><td>"
                 res=res+"<h3 align=center><a href=home>ホームに戻る</a></h3>\n"
-                res=res+"</td><td><h3 align=center><a href=treat-add>患者一覧</a></h3>"
+                res=res+"</td><td><h3 align=center><a href=call>患者一覧</a></h3>"
                 res=res+"</td></tr></table>"
                 res=res+"<h2 align=center>過去のナースコール内容</h2>"
                 res=res+"<table align=center border=1 style=\"border-collapse: collapse\">"
