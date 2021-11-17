@@ -1,0 +1,24 @@
+<div id="ajaxreload">
+
+</div>
+
+<script>
+    function ajaxUpdate(url,element){
+        var ajax=new XMLHttpRequest;
+        ajax.open("GET",url,true);
+        ajax.onload=function(){
+        element.innerHTML=ajax.responseText;
+    };
+    ajax.send(null);
+    setTimeout(function(){
+        ajaxUpdate(url,element);
+    },10000)
+    }
+    window.addEventListener("load",function(){
+      var url="http://192.168.1.99:5000/ajax";
+      var div=document.getElementById("ajaxreload");
+      setTimeout(function(){
+        ajaxUpdate(url,div);
+      },5000)
+    });
+  </script>
