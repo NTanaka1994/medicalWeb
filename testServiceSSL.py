@@ -451,7 +451,7 @@ def news():
                     cur2=conn.cursor()
                     cur2.execute("SELECT user_name FROM users WHERE user_id=?",(int(col[2]),))
                     for col2 in cur2:
-                        res=res+"\t<tr><td>"+col2[0]+"</td><td><form method=POST action=news><input type=hidden name=title value="+str(col[0])+">"+col[1]+"</td><td><input type=submit value=閲覧></form></td></tr>\n"
+                        res=res+"\t<tr><td>"+html.escape(col2[0])+"</td><td><form method=POST action=news><input type=hidden name=title value="+str(col[0])+">"+col[1]+"</td><td><input type=submit value=閲覧></form></td></tr>\n"
                 res=res+"</table>"
                 conn.close()
                 return render_template("news.html", res=res,title="連絡一覧",css=css,jquery=jquery,jsmart=jsmart,menu=menu_p)
@@ -639,8 +639,8 @@ def result_add_check():
                     res=res+"\t<input type=hidden name=result-add-check value=\""+token+"\">"
                     for col in cur:
                         res=res+"\t<tr><td>患者名</td><td>"+html.escape(col[0])+"</td></tr>\n"
-                    res=res+"\t<tr><td colspan=2>"+cont+"</td></tr>\n"
-                    res=res+"\t<tr><td colspan=2><input type=submit value=確定></td></tr>\n"
+                    res=res+"\t<tr><td colspan=2><pre>"+cont+"</pre></td></tr>\n"
+                    res=res+"\t<tr><td colspan=2 align=right><input type=submit value=確定></td></tr>\n"
                     res=res+"</table>\n</form>"
                     res=res+"<form method=POST action=result-add><table align=center>\n"
                     res=res+"<tr><td align=right><input type=hidden name=user_id value="+str(user_id)+"><input type=submit value=やり直す></td></tr>"
@@ -862,8 +862,8 @@ def treat_add_check():
                     for col in cur:
                         res=res+"\t<tr><td>患者名</td><td>"+html.escape(col[0])+"</td></tr>\n"
                     res=res+"\t<tr><td>タイトル</td><td>"+title+"</td></tr>\n"
-                    res=res+"\t<tr><td colspan=2>"+cont+"</td></tr>\n"
-                    res=res+"\t<tr><td colspan=2><input type=submit value=確定></td></tr>\n"
+                    res=res+"\t<tr><td colspan=2><pre>"+cont+"</pre></td></tr>\n"
+                    res=res+"\t<tr><td colspan=2 align=right><input type=submit value=確定></td></tr>\n"
                     res=res+"</table>\n</form>"
                     res=res+"<form method=POST action=treat-add><table align=center>\n"
                     res=res+"<tr><td align=right><input type=hidden name=user_id value="+str(user_id)+"><input type=submit value=やり直す></td></tr>"
@@ -941,7 +941,7 @@ def record_add():
                     cur2.execute("SELECT user_name FROM users WHERE user_id=?",(col[0],))
                     for col2 in cur2:
                         res=res+"\t<tr><td>記録者</td><td>"+html.escape(str(col2[0]))+"</td><td>記録日時</td><td>"+str(col[1])[0:19]+"</td></tr>\n"
-                        res=res+"\t<tr><td colspan=4>"+html.escape(col[2])+"</td></tr>\n"
+                        res=res+"\t<tr><td colspan=4><pre>"+html.escape(col[2])+"</pre></td></tr>\n"
                 res=res+"</table>"
                 conn.close()
                 return render_template("record_add.html", token=token,res=res,user_id=user_id,title=tmp[0],css=css,jquery=jquery,jsmart=jsmart,menu=menu_d)
@@ -972,8 +972,8 @@ def record_add_check():
                     res=res+"\t<input type=hidden name=record-add-check value=\""+token+"\">"
                     for col in cur:
                         res=res+"\t<tr><td>患者名</td><td>"+html.escape(col[0])+"</td></tr>"
-                    res=res+"\t<tr><td colspan=2>"+cont+"</td></tr>"
-                    res=res+"\t<tr><td colspan=2><input type=submit value=確定></td></tr>"
+                    res=res+"\t<tr><td colspan=2><pre>"+cont+"</pre></td></tr>"
+                    res=res+"\t<tr><td colspan=2 align=right><input type=submit value=確定></td></tr>"
                     res=res+"</table>\n</form>"
                     res=res+"<form method=POST action=record-add><table align=center>\n"
                     res=res+"<tr><td align=right><input type=hidden name=id value=\""+str(user_id)+"\"><input type=submit value=やり直す></td></tr>"
@@ -1124,7 +1124,7 @@ def msg_doc_check():
                     res=res+"<input type=hidden name=title value=\""+title+"\">\n<input type=hidden name=cont value=\""+cont+"\">"
                     res=res+"<input type=hidden name=msg-doc-check value=\""+token+"\">"
                     res=res+"\t<tr><td>タイトル</td><td>"+title+"</td></tr>\n"
-                    res=res+"\t<tr><td colspan=2>"+cont+"</td>\n"
+                    res=res+"\t<tr><td colspan=2><pre>"+cont+"</pre></td>\n"
                     cur.execute("SELECT user_name FROM users WHERE user_id=?",(user_id,))
                     for col in cur:
                         res=res+"\t<tr><td>連絡先</td><td>"+html.escape(col[0])+"</td></tr>"
@@ -1384,7 +1384,7 @@ def msg_nur():
                     res=res+"<input type=hidden name=msg-nur-check value=\""+token+"\">"
                     res=res+"\t<tr><td>タイトル</td><td>"+title+"</td></tr>"
                     res=res+"\t<tr><td>内容</td><td><pre>"+cont+"</pre></td></tr>"
-                    res=res+"\t<tr><td colspan=2><input type=submit value=送信></td></tr>"
+                    res=res+"\t<tr><td colspan=2 align=right><input type=submit value=送信></td></tr>"
                     res=res+"</table>\n"
                     res=res+"<h3 align=center><a href=msg-nur>やり直す</a><h3>"
                     return render_template("msg_nur_comp.html", title="以下の内容で送信しますか？",res=res,css=css,jquery=jquery,jsmart=jsmart,menu=menu_n)
